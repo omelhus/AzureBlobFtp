@@ -1,11 +1,7 @@
-﻿using FubarDev.FtpServer.FileSystem;
+﻿using System;
+using FubarDev.FtpServer.FileSystem;
 using FubarDev.FtpServer.FileSystem.Generic;
 using Microsoft.WindowsAzure.Storage.Blob;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace AdamHurwitz.FtpServer.FileSystem.AzureBlob
 {
@@ -16,9 +12,9 @@ namespace AdamHurwitz.FtpServer.FileSystem.AzureBlob
             FileSystem = fileSystem;
             Item = item;
             if (Item.GetType().Name == "CloudBlobDirectory")
-                IsFolder  = true;
+                IsFolder = true;
             else
-                IsFolder  = false;
+                IsFolder = false;
 
             Permissions = new GenericUnixPermissions(
                 new GenericAccessMode(true, true, IsFolder),
@@ -40,8 +36,7 @@ namespace AdamHurwitz.FtpServer.FileSystem.AzureBlob
             {
                 if (IsFolder)
                     return null;
-                else
-                    return ((CloudBlockBlob)Item).Properties.LastModified;
+                return ((CloudBlockBlob) Item).Properties.LastModified;
             }
         }
 
@@ -51,8 +46,7 @@ namespace AdamHurwitz.FtpServer.FileSystem.AzureBlob
             {
                 if (IsFolder)
                     return null;
-                else
-                    return ((CloudBlockBlob)Item).Properties.LastModified;
+                return ((CloudBlockBlob) Item).Properties.LastModified;
             }
         }
 
@@ -62,16 +56,16 @@ namespace AdamHurwitz.FtpServer.FileSystem.AzureBlob
             {
                 if (IsFolder)
                 {
-                    var dir = (CloudBlobDirectory)Item;
-                    return dir.Prefix.Replace(dir.Parent.Prefix,"").TrimEnd('/');
+                    var dir = (CloudBlobDirectory) Item;
+                    if (!string.IsNullOrEmpty(dir.Parent?.Prefix))
+                        return dir.Prefix.Replace(dir.Parent.Prefix, "").TrimEnd('/');
+                    return dir.Prefix.TrimEnd('/');
                 }
-                else
-                {
-                    var blob = (CloudBlockBlob)Item;
+                var blob = (CloudBlockBlob) Item;
+                if (!string.IsNullOrEmpty(blob.Parent?.Prefix))
                     return blob.Name.Replace(blob.Parent.Prefix, "");
-                }
+                return blob.Name;
             }
         }
-
     }
 }

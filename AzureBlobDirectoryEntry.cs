@@ -14,7 +14,6 @@ namespace AdamHurwitz.FtpServer.FileSystem.AzureBlob
             : base(fileSystem, directory)
         {
             IsRoot = isRoot;
-
         }
 
         public bool IsDeletable
