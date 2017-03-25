@@ -17,7 +17,6 @@ namespace AdamHurwitz.FtpServer.FileSystem.AzureBlob
         public AzureBlobFileSystem(CloudBlobContainer container, string userId)
         {
             Container = container;
-            //CreateAzureBlobDirectory("FTPROOT");
             Root = new AzureBlobDirectoryEntry(this, Container.GetDirectoryReference(""), true);
         }
 
