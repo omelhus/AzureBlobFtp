@@ -35,7 +35,7 @@ namespace AdamHurwitz.FtpServer.FileSystem.AzureBlob
             get
             {
                 if (IsFolder)
-                    return null;
+                    return DateTimeOffset.MinValue;
                 return ((CloudBlockBlob) Item).Properties.LastModified;
             }
         }
@@ -45,7 +45,7 @@ namespace AdamHurwitz.FtpServer.FileSystem.AzureBlob
             get
             {
                 if (IsFolder)
-                    return null;
+                    return DateTimeOffset.MinValue;
                 return ((CloudBlockBlob) Item).Properties.LastModified;
             }
         }
